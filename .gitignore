@@ -1,0 +1,12 @@
+# Secret and configuration files
+secrets/
+*.env
+*.key
+*.crt
+*.pem
+
+# Compiled files and build artifacts
+build/
+dist/
+bin/
+*.log
