@@ -4,9 +4,8 @@ metadata:
   name: mariadb
 spec:
   selector:
-    app: mariadb-galera
+    app: mariadb
   ports:
-  - port: 3306
-    targetPort: 3306
+    - port: 3306
+      targetPort: 3306
   clusterIP: None
-

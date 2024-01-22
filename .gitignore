@@ -10,3 +10,6 @@ build/
 dist/
 bin/
 *.log
+
+# MySQL db data
+/data
