@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-galera-config
+  namespace: "default"
+data:
+  my.cnf: |
+    [client]
+    port=3306
+    socket=/var/lib/mysql/mysql.sock
+
+    [mysqld]
+    default_storage_engine=InnoDB
+    datadir=/var/lib/mysql
+    bind_address=0.0.0.0
+    port=3306
+    socket=/var/lib/mysql/mysql.sock
+    binlog_format=ROW
+
+    [galera]
+    wsrep_on=ON
+    wsrep_provider=/usr/lib/galera/libgalera_smm.so
+    wsrep_cluster_address=gcomm://
+    wsrep_cluster_name=galera
