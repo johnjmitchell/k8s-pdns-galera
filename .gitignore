@@ -13,3 +13,5 @@ bin/
 
 # MySQL db data
 /data
+
+charts/
