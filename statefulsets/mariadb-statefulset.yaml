@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb-galera
+  namespace: "default"
+spec:
+  serviceName: mariadb-galera
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb-galera
+  template:
+    metadata:
+      labels:
+        app: mariadb-galera
+    spec:
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
+      containers:
+        - name: mariadb-galera
+          image: mariadb:10.5
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            runAsUser: 1001
+            runAsNonRoot: true
+            seLinuxOptions: {}
+          env:
+            - name: MARIADB_DEFAULT_PORT_NUMBER
+              value: "3306"
+            - name: MARIADB_GALERA_CLUSTER_NAME
+              value: "galera"
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-galera
+                  key: mariadb-root-password
+            - name: MARIADB_DATABASE
+              value: "my_db"
+          ports:
+            - name: mysql
+              containerPort: 3306
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+            - name: mariadb-galera-config
+              mountPath: /etc/mysql/conf.d
+      volumes:
+        - name: mariadb-galera-config
+          configMap:
+            name: mariadb-galera-config
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
