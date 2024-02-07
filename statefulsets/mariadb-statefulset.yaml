@@ -6,7 +6,7 @@ metadata:
 spec:
   serviceName: mariadb-galera
   podManagementPolicy: OrderedReady
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: mariadb-galera
@@ -28,9 +28,24 @@ spec:
               drop:
               - ALL
             privileged: false
+            readOnlyRootFilesystem: false
             runAsUser: 1001
             runAsNonRoot: true
             seLinuxOptions: {}
+          command: ["/bin/bash", "-c"]
+          args:
+          - |
+            #!/bin/bash
+            set -e
+            POD_INDEX="${HOSTNAME##*-}"
+            CLUSTER_JOIN="mariadb-galera-0.mariadb-galera.default.svc.cluster.local"
+            if [[ "$POD_INDEX" == "0" ]]; then
+              echo "Bootstrapping the cluster"
+              exec mysqld --wsrep-new-cluster --wsrep_cluster_address="gcomm://"
+            else
+              echo "Joining the cluster"
+              exec mysqld --wsrep_cluster_address="gcomm://$CLUSTER_JOIN"
+            fi
           env:
             - name: MARIADB_DEFAULT_PORT_NUMBER
               value: "3306"
