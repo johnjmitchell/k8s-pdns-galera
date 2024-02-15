@@ -34,23 +34,25 @@ spec:
             seLinuxOptions: {}
           command: ["/bin/bash", "-c"]
           args:
-          - |
-            #!/bin/bash
-            set -e
-            POD_INDEX="${HOSTNAME##*-}"
-            CLUSTER_JOIN="mariadb-galera-0.mariadb-galera.default.svc.cluster.local"
-            if [[ "$POD_INDEX" == "0" ]]; then
-              echo "Bootstrapping the cluster"
-              exec mysqld --wsrep-new-cluster --wsrep_cluster_address="gcomm://"
-            else
-              echo "Joining the cluster"
-              exec mysqld --wsrep_cluster_address="gcomm://$CLUSTER_JOIN"
-            fi
+            - |
+              set -e
+              POD_INDEX="${HOSTNAME##*-}"
+              if [[ "$POD_INDEX" == "0" && "$MARIADB_GALERA_BOOTSTRAP" == "true" ]]; then
+                echo "This is the initial startup of the bootstrap node"
+                exec docker-entrypoint.sh mysqld --wsrep-new-cluster --wsrep_cluster_address="${MARIADB_GALERA_CLUSTER_ADDRESS}"
+              else
+                echo "This is a regular node startup"
+                exec docker-entrypoint.sh mysqld --wsrep_cluster_address="${MARIADB_GALERA_CLUSTER_ADDRESS}"
+              fi
           env:
             - name: MARIADB_DEFAULT_PORT_NUMBER
               value: "3306"
             - name: MARIADB_GALERA_CLUSTER_NAME
               value: "galera"
+            - name: MARIADB_GALERA_CLUSTER_ADDRESS
+              value: "gcomm://mariadb-galera-0.mariadb-galera.default.svc.cluster.local,mariadb-galera-1.mariadb-galera.default.svc.cluster.local,mariadb-galera-2.mariadb-galera.default.svc.cluster.local"
+            - name: MARIADB_GALERA_BOOTSTRAP
+              value: "true"
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
