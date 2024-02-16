@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: powerdns
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: powerdns
+  template:
+    metadata:
+      labels:
+        app: powerdns
+    spec:
+      containers:
+      - name: powerdns
+        image: powerdns/pdns-auth-48
+        args:
+        - "--no-config"
+        - "--daemon=no"
+        - "--local-port=5353"
+        - "--launch=gmysql"
+        - "--gmysql-host=$(MYSQL_HOST)"
+        - "--gmysql-user=$(MYSQL_USER)"
+        - "--gmysql-password=$(MYSQL_PASSWORD)"
+        - "--gmysql-dbname=$(MYSQL_DB)"
+        env:
+        - name: MYSQL_HOST
+          value: mariadb-galera.default.svc.cluster.local
+        - name: MYSQL_USER
+          value: root
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: powerdns-secrets
+              key: gmysql-password
+        - name: MYSQL_DB
+          value: my_db
+        ports:
+        - containerPort: 5353
+          name: dns-udp
+          protocol: UDP
+        - containerPort: 5353
+          name: dns-tcp
+          protocol: TCP
+        - containerPort: 8081
+          name: api
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
