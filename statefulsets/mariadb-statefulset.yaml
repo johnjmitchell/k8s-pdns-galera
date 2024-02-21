@@ -59,7 +59,7 @@ spec:
                   name: mariadb-galera
                   key: mariadb-root-password
             - name: MARIADB_DATABASE
-              value: "my_db"
+              value: "pdns"
           ports:
             - name: mysql
               containerPort: 3306
