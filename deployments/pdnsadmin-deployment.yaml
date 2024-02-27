@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: powerdnsadmin
+  namespace: "default"
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: powerdnsadmin
+  template:
+    metadata:
+      labels:
+        app: powerdnsadmin
+    spec:
+      containers:
+      - name: powerdnsadmin
+        image: powerdnsadmin/pda-legacy:0.4.2
+        env:
+        - name: SQLALCHEMY_DATABASE_URI
+          valueFrom:
+            secretKeyRef:
+              name: powerdns-secrets
+              key: pda-db-string
+        ports:
+        - containerPort: 80
