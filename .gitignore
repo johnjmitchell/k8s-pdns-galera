@@ -11,7 +11,5 @@ dist/
 bin/
 *.log
 
-# MySQL db data
-/data
-
+# Helm charts
 charts/
