@@ -13,3 +13,5 @@ bin/
 
 # Helm charts
 charts/
+
+metallb-config.yaml
