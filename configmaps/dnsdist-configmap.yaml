@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dnsdist-config
+  namespace: "default"
+data:
+  dnsdist.conf: |
+    function resolveCB(hostname, ips)
+      local port = 5353
+      for _, ip in ipairs(ips) do
+        newServer(ip:toString() .. ":" .. port) -- Concatenate IP address with port and pass it as a string
+      end
+    end
+
+    setLocal('0.0.0.0:5353')
+    getAddressInfo('powerdns.default.svc.cluster.local.', resolveCB)
+    setServerPolicy(firstAvailable)

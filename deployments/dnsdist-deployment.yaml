@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dnsdist
+spec:
+  selector:
+    matchLabels:
+      app: dnsdist
+  template:
+    metadata:
+      labels:
+        app: dnsdist
+    spec:
+      containers:
+      - name: dnsdist
+        image: powerdns/dnsdist-19
+        volumeMounts:
+        - name: dnsdist-config-volume
+          mountPath: /etc/dnsdist
+          readOnly: true
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5353
+      volumes:
+      - name: dnsdist-config-volume
+        configMap:
+          name: dnsdist-config
+          items:
+          - key: dnsdist.conf
+            path: dnsdist.conf
