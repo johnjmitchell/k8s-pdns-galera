@@ -8,13 +8,14 @@ metadata:
 spec:
   selector:
     app: powerdns
+  clusterIP: None
   ports:
   - name: dns-udp
-    port: 53
-    targetPort: 53
+    port: 5353
+    targetPort: 5353
     protocol: UDP
   - name: dns-tcp
-    port: 53
+    port: 5353
     targetPort: 5353
     protocol: TCP
   - name: api
