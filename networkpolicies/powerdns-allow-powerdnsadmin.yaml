@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: powerdns-allow-powerdnsadmin
+  namespace: "default"
+spec:
+  podSelector:
+    matchLabels:
+      app: powerdns
+  policyTypes:
+    - Ingress
+  ingress: 
+    - from:
+        - podSelector: 
+            matchLabels:
+              app: powerdnsadmin
