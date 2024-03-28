@@ -16,9 +16,12 @@ spec:
       containers:
       - name: powerdns
         image: powerdns/pdns-auth-48
+        volumeMounts:
+        - name: powerdns-config-volume
+          mountPath: /etc/powerdns
+          readOnly: true
         args:
         - "--no-config"
-        - "--daemon=no"
         - "--local-port=5353"
         - "--launch=gmysql"
         - "--gmysql-host=$(MYSQL_HOST)"
@@ -72,3 +75,10 @@ spec:
           limits:
             memory: "256Mi"
             cpu: "500m"
+      volumes:
+      - name: powerdns-config-volume
+        configMap:
+          name: powerdns-config
+          items:
+          - key: pdns.conf
+            path: pdns.conf
