@@ -8,7 +8,6 @@ metadata:
 spec:
   selector:
     app: powerdns
-  clusterIP: None
   ports:
   - name: dns-udp
     port: 5353
