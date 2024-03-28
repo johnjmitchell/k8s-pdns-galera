@@ -14,4 +14,5 @@ bin/
 # Helm charts
 charts/
 
+test-pod.yaml
 metallb-config.yaml
