@@ -1,0 +1,26 @@
+---
+- name: Get k3s installed version
+  ansible.builtin.command: k3s --version
+  register: k3s_version_output
+  changed_when: false
+  ignore_errors: true
+
+- name: Download & install k3s
+  when: k3s_version_output.rc != 0
+  block: 
+  - name: Download K3s installation script
+    get_url:
+      url: https://get.k3s.io
+      dest: /usr/local/bin/k3s-install.sh
+      owner: root
+      group: root
+      mode: 'u+x'
+
+  - name: Install K3s agent
+    ansible.builtin.shell:
+      cmd: /usr/local/bin/k3s-install.sh 
+    environment:
+      INSTALL_K3S_VERSION: "{{ k3s_version }}"
+      K3S_URL: "https://{{ hostvars['k3s-master-1']['ansible_host'] }}:6443"
+      K3S_TOKEN: "{{ hostvars['k3s-master-1']['token'] }}"
+    register: k3s_agent_installation

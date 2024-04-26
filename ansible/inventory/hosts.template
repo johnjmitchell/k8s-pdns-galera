@@ -1,0 +1,20 @@
+k3s_cluster:
+  children:
+    server:
+      hosts:
+        k3s-master-1:
+          ansible_host: <master_vm_ip_01>
+    agent:
+      hosts:
+        k3s-worker-1:
+          ansible_host: <worker_vm_ip_01>
+        k3s-worker-2:
+          ansible_host: <worker_vm_ip_02>
+        k3s-worker-3:
+          ansible_host: <worker_vm_ip_03>
+
+  vars: 
+      ansible_user: 
+      ansible_ssh_private_key_file: /path/to/private/key
+      k3s_version: v1.29.2+k3s1
+      api_endpoint: "{{ hostvars[groups['server'][0]]['ansible_host'] }}"

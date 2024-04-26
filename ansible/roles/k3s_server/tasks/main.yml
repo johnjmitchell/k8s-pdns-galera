@@ -1,0 +1,37 @@
+---
+- name: Get k3s installed version
+  ansible.builtin.command: k3s --version
+  register: k3s_version_output
+  changed_when: false
+  ignore_errors: true
+
+- name: Download & install k3s
+  when: k3s_version_output.rc != 0
+  block: 
+  - name: Download K3s installation script
+    get_url:
+      url: https://get.k3s.io
+      dest: /usr/local/bin/k3s-install.sh
+      owner: root
+      group: root
+      mode: 'u+x'
+
+  - name: Install K3s server
+    ansible.builtin.shell:
+      cmd: "/usr/local/bin/k3s-install.sh --disable=servicelb,traefik"
+    environment:
+      INSTALL_K3S_VERSION: "{{ k3s_version }}"
+    register: k3s_server_installation
+
+- name: Wait for node-token
+  ansible.builtin.wait_for:
+    path: /var/lib/rancher/k3s/server/node-token
+
+- name: Read node-token from master
+  ansible.builtin.slurp:
+    src: /var/lib/rancher/k3s/server/node-token
+  register: node_token
+
+- name: Store Master node-token
+  ansible.builtin.set_fact:
+    token: "{{ node_token.content | b64decode | regex_replace('\n', '') }}"

@@ -1,0 +1,6 @@
+---
+- name: Deploy vms
+  hosts: localhost
+  gather_facts: false
+  roles: 
+    - deploy_vms

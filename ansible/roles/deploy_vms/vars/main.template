@@ -1,0 +1,29 @@
+vcenter_hostname: ""
+vcenter_username: ""
+vcenter_password: ""
+esxi_hostname: ""
+datacenter_name: ""
+folder_name: ""
+resource_pool: ""
+vm_template: ""
+vm_memory: 
+vm_num_cpus: 
+vm_user: ""
+vm_password: ""
+pub_ssh_key: ""
+datastore_name: ""
+network_name: ""
+netmask: ''
+gateway: ''
+dns_servers:
+  - <dns_ip_01>
+  - <dns_ip_02>
+vms:
+  - name: k3s-master-1
+    ip: <ip>
+  - name: k3s-worker-1
+    ip: <ip>
+  - name: k3s-worker-2
+    ip: <ip>
+  - name: k3s-worker-3
+    ip: <ip>

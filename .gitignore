@@ -1,4 +1,6 @@
-# Secret and configuration files
+# Ignore sensitive files
+ansible/roles/deploy_vms/vars/main.yml
+ansible/inventory/hosts.yml
 secrets/
 *.env
 *.key
@@ -14,5 +16,6 @@ bin/
 # Helm charts
 charts/
 
-test-pod.yaml
-metallb-config.yaml
+# Config files
+metallb-config.yml
+.vscode

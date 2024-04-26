@@ -1,0 +1,45 @@
+---
+- name: Populate service facts
+  ansible.builtin.service_facts: 
+
+# - name: Allow Firewalld exceptions
+#   when: 
+#     - ansible_facts.services['firewalld.service'] is defined
+#     - ansible_facts.services['firewalld.service'].state == 'running'
+#   block: 
+#     - name: If Firewalld enabled, open api port
+#       ansible.posix.firewalld:
+#         port: "{{ api_port }}/tcp"
+#         zone: public
+#         state: enabled
+#         permanent: true
+#         immediate: true
+
+#     - name: If Firewalld enabled, allow default CIDRs
+#       ansible.posix.firewalld:
+#         source: "{{ item }}"
+#         zone: public
+#         state: enabled
+#         permanent: true
+#         immediate: true
+#       loop: 
+#         - "10.42.0.0/16" #pods
+#         - "10.43.0.0/16" #services
+
+- name: Stop Firewalld service if running
+  ansible.builtin.service:
+    name: firewalld
+    state: stopped
+  when: ansible_facts.services['firewalld.service'].state == 'running'
+  
+- name: Remove swapfile from /etc/fstab
+  mount: 
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items: 
+    - swap
+    - none
+
+- name: Disable swap
+  ansible.builtin.command: swapoff -a
