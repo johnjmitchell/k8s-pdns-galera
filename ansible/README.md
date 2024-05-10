@@ -4,18 +4,29 @@ This directory contains Ansible playbooks and roles for automating the deploymen
 
 ## Contents
 
-- [inventory/](./inventory/): The inventory contains the hosts file which defines the VMs used in the infrastructure.
+- `inventory/`: The inventory contains the hosts file which defines the VMs used in the infrastructure.
 
-- [playbooks/](./playbooks/):
+- `playbooks/`:
     - `deploy.yml`: Ansible playbook for provisioning VMs.
     - `remove.yml`: Ansible playbook for destroying the k3s cluster in its entirety.
     - `site.yml`: (Main) Ansible playbook for deploying the k3s cluster.
 
-- [roles/](./roles/):
+- `roles/`:
     - `deploy_vms/`: Role for provisioning VMs.
     - `k3s_agent/`: Role for deploying k3s agents and joining a cluster.
     - `k3s_server/`: Role for deploying k3s server(s) and deploying a cluster.
     - `prereq/`: Role for handling prerequisite tasks on nodes before cluster is deployed.
+
+- `ansible.template.cfg`: Ansible configuration file for project-wide settings and behaviour.
+
+- `requirements.yml`: Ansible collections required for the project.
+
+## Requirements
+The project requires the VMware Ansible Collection for provisioing VMs in a vCenter environment. You can still it using the following command:
+
+```bash
+ansible-galaxy install -r requirements.yml
+```
 
 ## Configurations
 
