@@ -23,23 +23,24 @@ This directory contains Ansible playbooks and roles for automating the deploymen
 SSH key generation is required for Ansible to securely communicate with the target VMs. The public key will be used later and automatically copied to each VM during provisioning, allowing Ansible to access them without passwords.
 
 1. **Generate an SSH Key**:
-- If you don't already have a key, generate one using the following command:
 
-    ```bash
-    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-    ```
+    * If you don't already have a key, generate one using the following command:
 
-- Follow the prompts to save the key to a default location. It is recommended to **not set a password for the key**. 
+        ```bash
+        ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+        ```
+
+    * Follow the prompts to save the key to a default location. It is recommended to **not set a password for the key**. 
 
 2. **Copy the public key**: 
 
-- Print the public key:
+    * Print the public key:
 
-    ```bash
-    cat ~/.ssh/id_rsa.pub
-    ```
+        ```bash
+        cat ~/.ssh/id_rsa.pub
+        ```
 
-- Copy the key to your clipboard.
+    * Copy the key to your clipboard.
 
 ### Configure VM Hardware
 
@@ -85,12 +86,11 @@ SSH key generation is required for Ansible to securely communicate with the targ
     ```
 
 - Save the file as `main.yml`.
-
 - **Notes**: 
 
-    - Hardware requirements for different sized k3s clusters can be found on the k3s documentation [here](https://docs.k3s.io/installation/requirements?os=rhel).
+    * Hardware requirements for different sized k3s clusters can be found on the k3s documentation [here](https://docs.k3s.io/installation/requirements?os=rhel).
 
-    - This template creates VMs with identical hardware and configurations, including the user. If different hardware or usernames for different machines are required, you'll need to modify the `main.yml` file that specifies the VMs individually.
+    * This template creates VMs with identical hardware and configurations, including the user. If different hardware or usernames for different machines are required, you'll need to modify the `main.yml` file that specifies the VMs individually.
 
 ### Modify Ansible Inventory
 
