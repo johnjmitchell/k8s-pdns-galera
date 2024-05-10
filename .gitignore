@@ -1,6 +1,7 @@
 # Ignore sensitive files
 ansible/roles/deploy_vms/vars/main.yml
 ansible/inventory/hosts.yml
+ansible/ansible.cfg
 secrets/
 *.env
 *.key
