@@ -7,7 +7,3 @@ This repository contains the necessary Kubernetes manifests and configurations t
 - [mariadb-galera](./mariadb-galera/README.md): Manifests for deploying MariaDB Galera cluster.
 - [powerdns](./powerdns/README.md): Manifests for deploying PowerDNS service.
 - [powerdnsadmin](./powerdnsadmin/README.md): Manifests for deploying PowerDNSAdmin service.
-
-## Usage
-
-Refer to individual README files in subdirectories for specific usage instructions.
