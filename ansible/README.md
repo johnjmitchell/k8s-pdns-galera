@@ -1,21 +1,21 @@
 # Ansible Playbooks and Roles for DNS Server Infrastructure Provisioning
 
-This directory contains Ansible playbooks and roles for automating the deployment and configuration of infrastructure components. Specifically, Ansible will provision VMs in a VMware vCenter and deploy a k3s that spans these machines. 
+This directory contains Ansible playbooks and roles for automating the deployment and configuration of infrastructure components. Specifically, Ansible will provision VMs in a VMware vCenter and deploy a k3s cluster that spans these machines. 
 
 ## Contents
 
 - [inventory/](./inventory/): The inventory contains the hosts file which defines the VMs used in the infrastructure.
 
-- [playbooks/](./playbooks/): Contains Ansible playbooks:
-    - 'deploy.yml': Ansible playbook for provisioning VMs.
-    - 'remove.yml': Ansible playbook for destroying the k3s cluster in its entirety.
-    - 'site.yml': (Main) Ansible playbook for deploying the k3s cluster.
+- [playbooks/](./playbooks/):
+    - `deploy.yml`: Ansible playbook for provisioning VMs.
+    - `remove.yml`: Ansible playbook for destroying the k3s cluster in its entirety.
+    - `site.yml`: (Main) Ansible playbook for deploying the k3s cluster.
 
-- [roles/](./roles/): Contains Ansible roles.
-    - 'deploy_vms/': Role for provisioning VMs.
-    - 'k3s_agent/': Role for deploying k3s agents and joining a cluster.
-    - 'k3s_server/': Role for deploying k3s server(s) and deploying a cluster.
-    - 'prereq/': Role for handling prerequisite tasks on nodes before cluster is deployed.
+- [roles/](./roles/):
+    - `deploy_vms/`: Role for provisioning VMs.
+    - `k3s_agent/`: Role for deploying k3s agents and joining a cluster.
+    - `k3s_server/`: Role for deploying k3s server(s) and deploying a cluster.
+    - `prereq/`: Role for handling prerequisite tasks on nodes before cluster is deployed.
 
 ## Configurations
 
@@ -44,7 +44,7 @@ SSH key generation is required for Ansible to securely communicate with the targ
 
 ### Configure VM Hardware
 
-- Open the `roles/deploy_vms/vars/main.template` file in your preferred text editor.
+- Open the `roles/deploy_vms/vars/main.template.yml` file in your preferred text editor.
 - Fill out the following variables with your vCenter credentials, VM hardware configurations and the public SSH key copied from earlier:
 
     ```yaml
@@ -94,7 +94,7 @@ SSH key generation is required for Ansible to securely communicate with the targ
 
 ### Modify Ansible Inventory
 
-- Open the `inventory/hosts.template` file in your preferred text editor.
+- Open the `inventory/hosts.template.yml` file in your preferred text editor.
 - Add the IP addresses of the VMs you provisioned under the appropriate groups:
 
     ```yaml
@@ -115,7 +115,7 @@ SSH key generation is required for Ansible to securely communicate with the targ
 - Save the file as `hosts.yml`.
 
 ### Ansible Configuration
-- Open the `ansible.cfg.template` file in your preferred text editor.
+- Open the `ansible.template.cfg` file in your preferred text editor.
 - Fill out the following variables:
 
     ```ini

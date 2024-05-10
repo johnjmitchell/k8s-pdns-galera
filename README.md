@@ -9,7 +9,9 @@ To get started, clone this repository to your local machine:
 ```bash
 git clone <repository_url>
 ```
-Then navigate to the project directory: 
+
+Then navigate to the project directory:
+
 ```bash
 cd <repository-directory>
 ```
@@ -18,7 +20,8 @@ cd <repository-directory>
 
 Ensure you have an existing vCenter environment where the VMs will be provisioned. 
 
-Ensure the following software is installed on your [control machine](https://docs.ansible.com/ansible/latest/network/getting_started/basic_concepts.html#control-node): 
+Ensure the following software is installed on your [control machine](https://docs.ansible.com/ansible/latest/network/getting_started/basic_concepts.html#control-node):
+
 - [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) - Automation tool to manage remote machines over the SSH protocol
 - [kubectl](https://kubernetes.io/docs/tasks/tools/) - Tool to run commands against Kubernetes clusters
 - [pyVmomi](https://pypi.org/project/pyvmomi/#installing) - Python SDK for the VMware vSphere API
@@ -31,19 +34,14 @@ kubectl version --client
 pip show pyvmomi
 ```
 
-## Directories
-
-- [ansible](./ansible/): Contains Ansible playbooks and roles for provisioning the infrastructure and deploying a k3s cluster.
-- [kubernetes](./kubernetes/): Holds Kubernetes manifests for deploying DNS server components: MariaDB Galera, PowerDNS, and PowerDNSAdmin.
-
 ## Usage
 
 1. **Provision VMs and Setup Kubernetes**:
-    - Navigate to the `ansible/` directory.
+    - Navigate to the [`ansible`](./ansible/) directory.
     - Follow the instructions in the Ansible README to provision VMs and setup Kubernetes.
 
 2. **Deploy DNS Server**:
-    - Navigate to the `kubernetes/` directory.
+    - Navigate to the [`kubernetes/`](./kubernetes/) directory.
     - Follow the instructions in the Kubernetes README to deploy the DNS server components.
 
 ## TODO
