@@ -1,6 +1,9 @@
+# vCenter credentials
 vcenter_hostname: ""
 vcenter_username: ""
 vcenter_password: ""
+
+# VM hardware configuration
 esxi_hostname: ""
 datacenter_name: ""
 folder_name: ""
@@ -10,7 +13,6 @@ vm_memory:
 vm_num_cpus: 
 vm_user: ""
 vm_password: ""
-pub_ssh_key: ""
 datastore_name: ""
 network_name: ""
 netmask: ''
@@ -27,3 +29,6 @@ vms:
     ip: <ip>
   - name: k3s-worker-3
     ip: <ip>
+
+# Public SSH key for VM access
+pub_ssh_key: ""
