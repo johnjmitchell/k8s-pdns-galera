@@ -4,7 +4,8 @@ This directory contains Ansible playbooks and roles for automating the deploymen
 
 ## Contents
 
-- `inventory/`: The inventory contains the hosts file which defines the VMs used in the infrastructure.
+- `inventory/`:
+    - `hosts.template.yml`: The hosts file defines the target VMs that Ansible will manage as well as some group variables.
 
 - `playbooks/`:
     - `deploy.yml`: Ansible playbook for provisioning VMs.
@@ -28,7 +29,7 @@ The project requires the VMware Ansible Collection for provisioing VMs in a vCen
 ansible-galaxy install -r requirements.yml
 ```
 
-## Configurations
+## Configuration
 
 ### SSH Key Generation
 SSH key generation is required for Ansible to securely communicate with the target VMs. The public key will be used later and automatically copied to each VM during provisioning, allowing Ansible to access them without passwords.
@@ -140,7 +141,9 @@ SSH key generation is required for Ansible to securely communicate with the targ
     
 - Save the file as `ansible.cfg`.
 
-## VM Provisioning
+## Usage
+
+### VM Provisioning
 
 After configuring the files, the VMs can be provisioned using the following command:
 
@@ -150,7 +153,7 @@ ansible-playbook playbooks/deploy.yml
 
 This playbook provisions VMs in your vCenter environment as per the configurations provided.
 
-## Kubernetes (K3s) Cluster Deployment
+### Kubernetes (K3s) Cluster Deployment
 
 After the VMs have been provisioned, K3s can be deployed using the following command:
 
@@ -160,7 +163,7 @@ ansible-playbook playbooks/site.yml
 
 This playbook deploys k3s on the server (master) node, stores the generated node token, and then deploys k3s on the agent nodes which join the cluster using the node token and API endpoint.
 
-## Verifying K3s Nodes
+### Verifying K3s Nodes
 
 After deploying the k3s cluster, you may want to ensure it is functioning correctly. Follow these steps to do so:
 
@@ -180,7 +183,16 @@ After deploying the k3s cluster, you may want to ensure it is functioning correc
         sudo kubectl get nodes
         ```
 
-    - This command should display the server node as well as any joined agent nodes.
+    - This command should display the server node as well as any joined agent nodes:
+        
+        ```bash
+        [john@k3s-master-1 ~]$ sudo kubectl get nodes
+        NAME           STATUS   ROLES                  AGE   VERSION
+        k3s-worker-2   Ready    <none>                 8d    v1.29.2+k3s1
+        k3s-master-1   Ready    control-plane,master   8d    v1.29.2+k3s1
+        k3s-worker-1   Ready    <none>                 8d    v1.29.2+k3s1
+        k3s-worker-3   Ready    <none>                 8d    v1.29.2+k3s1
+        ```
 
 3. **SSH into the Agent Nodes (Optional)**:
     - You can SSH into the agent nodes in a similar manner to the server node:
@@ -198,7 +210,7 @@ After deploying the k3s cluster, you may want to ensure it is functioning correc
 
     - This command should display the agent node is part of the cluster.
 
-## Removing the Cluster
+### Removing the Cluster
 
 If you need to remove the entire k3s cluster, you can use the following command:
 
