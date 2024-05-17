@@ -1,6 +1,10 @@
 # DNS Server Deployment
 
-This project automates the deployment of a DNS server using Ansible for infrastructure provisioning and Kubernetes for deploying the DNS server components. Ansible deploys the VMs and intalls k3s, while Kubernetes deploys the DNS server components onto the k3s cluster.
+This project automates the deployment of a DNS server infrastructure using Ansible for provisioning and Kubernetes for orchestrating the DNS server components. Here's how it works:
+
+- Infrastructure Provisioning with Ansible: Ansible handles the deployment of virtual machines (VMs) and installs k3s, a lightweight Kubernetes distribution, on these VMs. This sets up the foundation for hosting the DNS server components.
+
+- Deployment with Kubernetes: Once the infrastructure is in place, Kubernetes takes over to deploy and manage the DNS server components within the k3s cluster. This includes deploying pods, services, and other necessary resources to ensure the DNS server functions correctly.
 
 ## Getting Started
 
@@ -46,8 +50,10 @@ pip show pyvmomi
 
 ## TODO
 
+- [ ] Create dedicated user for PowerDNS to avoid using root.
+- [ ] Investigate '[Warning] Aborted connection x to db: 'pdns' user: 'root' host: 'localhost' (Got timeout reading communication packets)' message.
 - [ ] Investigate suitability of Helm or Kustomize for easier deployment.
-- [ ] Handle MariaDB Galera bootstrap logic.
+- [ ] Handle MariaDB Galera bootstrap logic:
     - [ ] Handle subsequent pod/service restarts.
     - [ ] Implement environment variables to control bootstrap status.
 - [ ] Add monitoring and logging setup for the Kubernetes cluster.

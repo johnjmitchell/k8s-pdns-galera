@@ -1,6 +1,6 @@
 # Kubernetes-based DNS Management with PowerDNS, PowerDNS Admin, and Galera
 
-This directory contains the necessary Kubernetes manifests and configurations to deploy a DNS management solution using PowerDNS with a MariaDB Galera cluster for database replication and PowerDNS Admin for web-based management. Metallb is used for external load balancing. Manifests can be applied using:
+This directory contains the necessary Kubernetes manifests and configurations to deploy a DNS management solution using PowerDNS with a MariaDB Galera cluster for database replication and PowerDNS Admin for web-based management. MetalLB is used for external load balancing. Manifests can be applied using:
 
 ```bash
 kubectl apply -f <manifest.yaml> 
@@ -63,7 +63,7 @@ mkdir -p secrets
 echo -n $(openssl rand -hex 32) > secrets/powerdns-api-key.txt
 
 # Generate and save root password for MariaDB to a txt file
-echo -n "s1mplepassw0rd" > mariadb-root-password.txt
+echo -n "s1mplepassw0rd" > secrets/mariadb-root-password.txt
 
 # Generate a random password for PowerDNS and MySQL connection
 password=$(openssl rand -base64 12)
@@ -75,7 +75,6 @@ echo -n $password > secrets/powerdns-password.txt
 TODO
 ```
 
-
 Then use the following command to generate the secrets:
 
 ```bash
@@ -85,9 +84,7 @@ kubectl create secret generic dns-secrets \
     --from-file=powerdns-password=./secrets/powerdns-password.txt
 ```
 
-While this approach improves security, a secure vault such as HashiCorp Vault should be used. Vault provides a centralised and secure way to manage and distribute secrets across Ansible environments and Kubernetes clusters. It offers features such as encryption, access control, auditing and secret rotation, ensuring that sensitive information remains protected at all times. 
-
-See: [HashiCorp Vault](https://developer.hashicorp.com/vault).
+While this approach improves security, a secure vault such as [HashiCorp Vault](https://developer.hashicorp.com/vault) should be used. Vault provides a centralised and secure way to manage and distribute secrets across Ansible environments and Kubernetes clusters. It offers features such as encryption, access control, auditing and secret rotation, ensuring that sensitive information remains protected at all times. 
 
 ## Usage
 
@@ -129,7 +126,6 @@ kubectl get pods -l app=mariadb-galera
 This should display:
 
 ```bash
-[john@controller kubernetes]$ kubectl get pods -l app=mariadb-galera
 NAME               READY   STATUS    RESTARTS   AGE
 mariadb-galera-0   1/1     Running   0          13m
 mariadb-galera-1   1/1     Running   0          13m
