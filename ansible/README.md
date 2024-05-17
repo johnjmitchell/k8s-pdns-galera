@@ -158,12 +158,12 @@ This playbook provisions VMs in your vCenter environment as per the configuratio
 After the VMs have been provisioned, K3s can be deployed using the following command:
 
 ```bash
-ansible-playbook playbooks/site.yml
+ansible-playbook playbooks/site.yml --ask-become-pass
 ```
 
 This playbook deploys k3s on the server (master) node, stores the generated node token, and then deploys k3s on the agent nodes which join the cluster using the node token and API endpoint.
 
-### Verifying K3s Nodes
+#### Verifying K3s Nodes
 
 After deploying the k3s cluster, you may want to ensure it is functioning correctly. Follow these steps to do so:
 
@@ -187,11 +187,10 @@ After deploying the k3s cluster, you may want to ensure it is functioning correc
         
         ```bash
         [john@k3s-master-1 ~]$ sudo kubectl get nodes
-        NAME           STATUS   ROLES                  AGE   VERSION
-        k3s-worker-2   Ready    <none>                 8d    v1.29.2+k3s1
-        k3s-master-1   Ready    control-plane,master   8d    v1.29.2+k3s1
-        k3s-worker-1   Ready    <none>                 8d    v1.29.2+k3s1
-        k3s-worker-3   Ready    <none>                 8d    v1.29.2+k3s1
+        k3s-master-1   Ready    control-plane,master   4m15s   v1.29.2+k3s1
+        k3s-worker-1   Ready    <none>                 3m21s   v1.29.2+k3s1
+        k3s-worker-2   Ready    <none>                 3m20s   v1.29.2+k3s1
+        k3s-worker-3   Ready    <none>                 3m15s   v1.29.2+k3s1
         ```
 
 3. **SSH into the Agent Nodes (Optional)**:
@@ -210,10 +209,45 @@ After deploying the k3s cluster, you may want to ensure it is functioning correc
 
     - This command should display the agent node is part of the cluster.
 
+#### Configuring External Access to Cluster
+To access the cluster externally, the generated `kubeconfig` must be copied to the machine where you want to manage the cluster.
+Typically, the file is located at `$HOME/.kube/config`, however k3s installs this file at `/etc/rancher/k3s/k3s.yaml`. Follow these steps to copy it to another machine:
+
+1. **SSH into the Server Node**:
+
+    ```bash
+    ssh <your_vm_user>@<server_node_ip>
+    ```
+
+2. **Copy the `kubeconfig` File**:
+
+    ```bash
+    sudo scp /etc/rancher/k3s/k3s.yaml <your_user>@<external_machine_ip>:~/.kube/config
+    ```
+
+3. **Modify Server Address in the File**:
+
+    - In the external machine, open the `~/.kube/config` file in your preferred text editor.
+    - Update the following line with the IP address of your server node:
+
+        ```yaml
+        server: https://<server_ip>:6443
+        ```
+
+    - Save the file.
+
+4. **Test Access**:
+
+    - Your local `kubectl` command should now communicate with the external cluster. This can be tested by using the following command:
+
+        ```bash
+        kubectl get nodes
+        ```
+
 ### Removing the Cluster
 
 If you need to remove the entire k3s cluster, you can use the following command:
 
 ```bash
-ansible-playbook playbooks/remove.yml
+ansible-playbook playbooks/remove.yml --ask-become-pass
 ```
