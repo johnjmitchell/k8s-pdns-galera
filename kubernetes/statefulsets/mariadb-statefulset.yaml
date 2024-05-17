@@ -56,7 +56,7 @@ spec:
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mariadb-galera
+                  name: dns-secrets
                   key: mariadb-root-password
             - name: MARIADB_DATABASE
               value: "pdns"
